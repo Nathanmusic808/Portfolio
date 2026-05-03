@@ -320,13 +320,16 @@
         }
 
         .bio-text {
-            flex: 2 1 400px; /* Takes up 2x space, but will wrap if container is < 400px */
-            min-width: 300px; /* Ensures text doesn't get impossibly thin */
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centers the text block container */
         }
 
         .bio-text p {
             margin-bottom: 1.5rem;
-            text-align: justify;
+            text-align: center; /* Centers the actual words */
+            max-width: 650px; /* Keeps line lengths comfortable to read */
         }
 
         /* --- Contact Section --- */
@@ -429,11 +432,16 @@
             }
 
             .bio-text {
-                padding: 0 1rem;
+                flex: none;
+                width: 100%;
+                padding: 0 1.5rem; /* Adds breathing room on the edges of phones */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
             }
 
             .bio-text p {
-                text-align: center; /* Changes from justify to center on mobile for better readability */
+                text-align: center; 
                 margin-left: auto;
                 margin-right: auto;
             }
