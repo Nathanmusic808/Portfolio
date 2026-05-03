@@ -177,7 +177,7 @@
 
         /* Hero Section */
         #hero {
-            background: radial-gradient(circle at center, rgba(15,15,17,0.4) 0%, var(--bg-color) 100%), url('hero-bg-placeholder.jpg') center/cover;
+            background: radial-gradient(circle at center, rgba(15,15,17,0.4) 0%, var(--bg-color) 100%), url('nateprofile.jpg') center/cover;
             align-items: center;
             text-align: center;
             position: relative;
@@ -288,25 +288,30 @@
             border: none;
         }
 
-        /* --- Bio Section --- */
+        /* --- Bio Section (UPDATED FOR RESIZE CENTERING) --- */
         #bio .bio-content {
             display: flex;
+            flex-wrap: wrap; /* Allows stacking when window shrinks */
             align-items: center;
+            justify-content: center; /* Forces center alignment when wrapped */
             gap: 4rem;
             max-width: 1000px;
             margin: 0 auto;
         }
 
         .bio-image {
-            flex: 1;
+            /* flex: grow shrink basis */
+            flex: 1 1 300px; /* Allows it to grow, but sets a floor of 300px before wrapping */
+            max-width: 350px; /* Prevents it from getting absurdly huge on ultrawide */
             aspect-ratio: 1;
             background: #27272a;
-            border-radius: 10px; /* Changed from circle for a sharper modern look */
-            background-image: url('profile-placeholder.jpg');
+            border-radius: 10px;
+            background-image: url('nateprofile.jpg');
             background-size: cover;
             background-position: center;
             box-shadow: 20px 20px 0px rgba(225, 29, 72, 0.2);
             transition: transform 0.5s ease;
+            margin: 0 auto; /* Backup centering */
         }
 
         .bio-image:hover {
@@ -315,7 +320,8 @@
         }
 
         .bio-text {
-            flex: 2;
+            flex: 2 1 400px; /* Takes up 2x space, but will wrap if container is < 400px */
+            min-width: 300px; /* Ensures text doesn't get impossibly thin */
         }
 
         .bio-text p {
@@ -334,6 +340,7 @@
             justify-content: center;
             gap: 2.5rem;
             margin-top: 3rem;
+            flex-wrap: wrap; /* Keeps buttons centered if window shrinks */
         }
 
         .contact-link {
@@ -405,14 +412,15 @@
                 transform: translateY(-9px) rotate(-45deg);
             }
 
+            /* Extra Mobile Refinements for Bio */
             #bio .bio-content {
-                flex-direction: column;
+                gap: 2.5rem;
                 text-align: center;
             }
 
             .bio-image {
-                width: 80%;
-                margin: 0 auto;
+                width: 250px;
+                height: 250px;
                 box-shadow: 10px 10px 0px rgba(225, 29, 72, 0.2);
             }
             
@@ -420,13 +428,20 @@
                 box-shadow: 15px 15px 0px rgba(225, 29, 72, 0.4);
             }
 
+            .bio-text {
+                padding: 0 1rem;
+            }
+
             .bio-text p {
-                text-align: center;
+                text-align: center; /* Changes from justify to center on mobile for better readability */
+                margin-left: auto;
+                margin-right: auto;
             }
 
             .contact-links {
                 flex-direction: column;
                 gap: 1.5rem;
+                padding: 0 2rem;
             }
         }
     </style>
