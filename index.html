@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nathaniel Morris | Portfolio</title>
     <style>
-        /* CSS Variables for easy theming */
+        /* CSS Variables */
         :root {
             --bg-color: #0f0f11;
             --text-primary: #f4f4f5;
             --text-secondary: #a1a1aa;
-            --accent-color: #e11d48; /* A sharp red accent, change to fit his vibe */
-            --nav-bg: rgba(15, 15, 17, 0.9);
+            --accent-color: #e11d48; /* Sharp red accent */
+            --nav-bg: rgba(15, 15, 17, 0.85);
         }
 
         /* Reset & Base Styles */
@@ -23,6 +23,7 @@
 
         html {
             scroll-behavior: smooth;
+            overflow-x: hidden; /* Prevent horizontal scroll from animations */
         }
 
         body {
@@ -30,6 +31,7 @@
             background-color: var(--bg-color);
             color: var(--text-primary);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         /* Typography */
@@ -47,6 +49,7 @@
 
         h2 span {
             color: var(--accent-color);
+            display: inline-block;
         }
 
         p {
@@ -56,23 +59,41 @@
             font-size: 1.1rem;
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* --- Scroll Animations --- */
+        .hidden {
+            opacity: 0;
+            filter: blur(4px);
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .animate-fade-in {
-            animation: fadeIn 1s ease-out forwards;
+        .hidden.slide-left {
+            transform: translateX(-50px);
         }
 
-        /* Navigation */
+        .hidden.slide-right {
+            transform: translateX(50px);
+        }
+
+        .show {
+            opacity: 1;
+            filter: blur(0);
+            transform: translate(0, 0);
+        }
+
+        /* Staggered delays for video grid */
+        .video-grid .hidden:nth-child(1) { transition-delay: 100ms; }
+        .video-grid .hidden:nth-child(2) { transition-delay: 250ms; }
+        .video-grid .hidden:nth-child(3) { transition-delay: 400ms; }
+
+        /* --- Navigation & Hamburger --- */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
             background: var(--nav-bg);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             padding: 1.5rem 5%;
             display: flex;
             justify-content: space-between;
@@ -87,6 +108,8 @@
             color: var(--text-primary);
             text-decoration: none;
             letter-spacing: 3px;
+            position: relative;
+            z-index: 1001;
         }
 
         nav ul {
@@ -101,14 +124,49 @@
             font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 1px;
+            position: relative;
+            padding-bottom: 5px;
             transition: color 0.3s;
+        }
+
+        /* Cool underline hover effect */
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
         }
 
         nav a:hover {
             color: var(--accent-color);
         }
 
-        /* Sections */
+        /* Hamburger Icon */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 28px;
+            height: 3px;
+            background-color: var(--text-primary);
+            margin: 6px auto;
+            transition: all 0.3s ease-in-out;
+            border-radius: 2px;
+        }
+
+        /* --- Sections --- */
         section {
             padding: 100px 5%;
             min-height: 100vh;
@@ -119,19 +177,41 @@
 
         /* Hero Section */
         #hero {
-            background: linear-gradient(to bottom, rgba(15,15,17,0.3), var(--bg-color)), url('hero-bg-placeholder.jpg') center/cover;
+            background: radial-gradient(circle at center, rgba(15,15,17,0.4) 0%, var(--bg-color) 100%), url('hero-bg-placeholder.jpg') center/cover;
             align-items: center;
             text-align: center;
+            position: relative;
+        }
+
+        /* Subtle animated background glow */
+        #hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, rgba(225, 29, 72, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            animation: pulse 8s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; }
+            100% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
         }
 
         #hero h1 {
             font-size: clamp(3rem, 8vw, 6rem);
             margin-bottom: 1rem;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
 
         #hero p {
             font-size: 1.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.8);
         }
 
         .cta-btn {
@@ -144,39 +224,59 @@
             text-decoration: none;
             letter-spacing: 2px;
             font-weight: bold;
-            transition: all 0.3s ease;
-            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            z-index: 1;
+        }
+
+        /* Button Hover Fill Animation */
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: var(--accent-color);
+            transition: all 0.4s ease;
+            z-index: -1;
+        }
+
+        .cta-btn:hover::before {
+            width: 100%;
         }
 
         .cta-btn:hover {
-            background: var(--accent-color);
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(225, 29, 72, 0.2);
+            box-shadow: 0 10px 20px rgba(225, 29, 72, 0.3);
         }
 
-        /* Videos Section */
+        /* --- Videos Section --- */
         .video-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            gap: 2.5rem;
             max-width: 1200px;
             margin: 0 auto;
             width: 100%;
         }
 
-        /* Responsive iframe container */
         .video-wrapper {
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: transform 0.3s ease;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            /* Upgraded Hover Animation */
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease;
         }
 
         .video-wrapper:hover {
-            transform: scale(1.02);
+            transform: scale(1.05) translateY(-10px);
+            box-shadow: 0 20px 40px rgba(225, 29, 72, 0.25);
+            z-index: 2;
         }
 
         .video-wrapper iframe {
@@ -188,7 +288,7 @@
             border: none;
         }
 
-        /* Bio Section */
+        /* --- Bio Section --- */
         #bio .bio-content {
             display: flex;
             align-items: center;
@@ -201,11 +301,17 @@
             flex: 1;
             aspect-ratio: 1;
             background: #27272a;
-            border-radius: 50%;
+            border-radius: 10px; /* Changed from circle for a sharper modern look */
             background-image: url('profile-placeholder.jpg');
             background-size: cover;
             background-position: center;
-            border: 4px solid var(--accent-color);
+            box-shadow: 20px 20px 0px rgba(225, 29, 72, 0.2);
+            transition: transform 0.5s ease;
+        }
+
+        .bio-image:hover {
+            transform: translate(-5px, -5px);
+            box-shadow: 25px 25px 0px rgba(225, 29, 72, 0.4);
         }
 
         .bio-text {
@@ -217,34 +323,38 @@
             text-align: justify;
         }
 
-        /* Contact Section */
+        /* --- Contact Section --- */
         #contact {
             text-align: center;
-            background-color: #18181b;
+            background-color: #121214;
         }
 
         .contact-links {
             display: flex;
             justify-content: center;
-            gap: 2rem;
-            margin-top: 2rem;
+            gap: 2.5rem;
+            margin-top: 3rem;
         }
 
         .contact-link {
             color: var(--text-primary);
             text-decoration: none;
             font-size: 1.2rem;
-            border-bottom: 2px solid transparent;
-            padding-bottom: 5px;
-            transition: border-color 0.3s, color 0.3s;
+            padding: 10px 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px;
+            transition: all 0.3s ease;
         }
 
         .contact-link:hover {
-            color: var(--accent-color);
+            color: #fff;
+            background-color: var(--accent-color);
             border-color: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(225, 29, 72, 0.2);
         }
 
-        /* Footer */
+        /* --- Footer --- */
         footer {
             text-align: center;
             padding: 2rem;
@@ -253,17 +363,70 @@
             font-size: 0.9rem;
         }
 
-        /* Media Queries for Mobile */
+        /* --- Mobile Responsiveness --- */
         @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+
+            /* Off-Canvas Mobile Menu */
+            nav ul {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 75vw;
+                height: 100vh;
+                background-color: #0f0f11;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 3rem;
+                transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+                box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+                border-left: 1px solid rgba(255,255,255,0.05);
+            }
+
+            nav ul.nav-active {
+                right: 0;
+            }
+
+            nav ul li a {
+                font-size: 1.5rem;
+            }
+
+            /* Hamburger Animation to 'X' */
+            .hamburger.toggle span:nth-child(1) {
+                transform: translateY(9px) rotate(45deg);
+            }
+            .hamburger.toggle span:nth-child(2) {
+                opacity: 0;
+            }
+            .hamburger.toggle span:nth-child(3) {
+                transform: translateY(-9px) rotate(-45deg);
+            }
+
             #bio .bio-content {
                 flex-direction: column;
                 text-align: center;
             }
-            nav ul {
-                display: none; /* In a full build, add a hamburger menu here */
+
+            .bio-image {
+                width: 80%;
+                margin: 0 auto;
+                box-shadow: 10px 10px 0px rgba(225, 29, 72, 0.2);
             }
+            
+            .bio-image:hover {
+                box-shadow: 15px 15px 0px rgba(225, 29, 72, 0.4);
+            }
+
             .bio-text p {
                 text-align: center;
+            }
+
+            .contact-links {
+                flex-direction: column;
+                gap: 1.5rem;
             }
         }
     </style>
@@ -272,40 +435,45 @@
 
     <nav>
         <a href="#" class="logo">Musician</a>
-        <ul>
+        <ul class="nav-links">
             <li><a href="#hero">Home</a></li>
             <li><a href="#videos">Solos</a></li>
             <li><a href="#bio">Bio</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </nav>
 
-    <section id="hero" class="animate-fade-in">
+    <section id="hero" class="hidden">
         <h1>Nathaniel Morris</h1>
         <p>Electric Guitarist / Studio Musician / Live Performer</p>
         <a href="#videos" class="cta-btn">View Solos</a>
     </section>
 
     <section id="videos">
-        <h2>Featured <span>Solos</span></h2>
+        <h2 class="hidden">Featured <span>Solos</span></h2>
         <div class="video-grid">
-            <div class="video-wrapper">
+            <div class="video-wrapper hidden">
                 <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
             </div>
-            <div class="video-wrapper">
+            <div class="video-wrapper hidden">
                 <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
             </div>
-            <div class="video-wrapper">
+            <div class="video-wrapper hidden">
                 <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
             </div>
         </div>
     </section>
 
     <section id="bio">
-        <h2>About The <span>Artist</span></h2>
+        <h2 class="hidden">About The <span>Artist</span></h2>
         <div class="bio-content">
-            <div class="bio-image"></div>
-            <div class="bio-text">
+            <div class="bio-image hidden slide-left"></div>
+            <div class="bio-text hidden slide-right">
                 <p>
                     Nathaniel Morris is a dynamic electric guitarist known for his emotive solos and technical precision. Blending elements of blues, classic/modern rock, and country, he brings a unique sonic texture to every project.
                 </p>
@@ -316,7 +484,7 @@
         </div>
     </section>
 
-    <section id="contact">
+    <section id="contact" class="hidden">
         <h2>Let's <span>Connect</span></h2>
         <p>Available for session work, live performances, and collaborations.</p>
         
@@ -332,22 +500,44 @@
     </footer>
 
     <script>
-        // Simple Intersection Observer to fade in sections as they scroll into view
-        const sections = document.querySelectorAll('section:not(#hero)');
-        
+        // --- Hamburger Menu Logic ---
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        const links = document.querySelectorAll('.nav-links li');
+
+        hamburger.addEventListener('click', () => {
+            // Toggle Nav
+            navLinks.classList.toggle('nav-active');
+            // Burger Animation
+            hamburger.classList.toggle('toggle');
+        });
+
+        // Close menu when clicking a link (Mobile)
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('nav-active');
+                hamburger.classList.remove('toggle');
+            });
+        });
+
+        // --- Intersection Observer for Scroll Animations ---
+        const observerOptions = {
+            threshold: 0.2, // Trigger when 20% of the element is visible
+            rootMargin: "0px 0px -50px 0px"
+        };
+
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+            entries.forEach((entry) => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-fade-in');
-                    entry.target.style.opacity = 1;
+                    entry.target.classList.add('show');
+                    // Optional: Stop observing once revealed to keep it visible
+                    observer.unobserve(entry.target); 
                 }
             });
-        }, { threshold: 0.1 });
+        }, observerOptions);
 
-        sections.forEach(section => {
-            section.style.opacity = 0; // hide initially
-            observer.observe(section);
-        });
+        const hiddenElements = document.querySelectorAll('.hidden');
+        hiddenElements.forEach((el) => observer.observe(el));
     </script>
 </body>
 </html>
