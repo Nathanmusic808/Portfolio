@@ -289,29 +289,33 @@
         }
 
         /* --- Bio Section (UPDATED FOR RESIZE CENTERING) --- */
+        #bio {
+            padding-top: 150px; /* Space from navigation */
+            background-color: var(--bg-color);
+        }
+
         #bio .bio-content {
             display: flex;
-            flex-wrap: wrap; /* Allows stacking when window shrinks */
+            flex-direction: row; /* Desktop horizontal flow */
             align-items: center;
-            justify-content: center; /* Forces center alignment when wrapped */
+            justify-content: space-between;
             gap: 4rem;
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
+            padding: 0 5%;
         }
 
         .bio-image {
-            /* flex: grow shrink basis */
-            flex: 1 1 300px; /* Allows it to grow, but sets a floor of 300px before wrapping */
-            max-width: 350px; /* Prevents it from getting absurdly huge on ultrawide */
+            flex: 1 1 350px; 
+            max-width: 400px;
             aspect-ratio: 1;
             background: #27272a;
-            border-radius: 10px;
-            background-image: url('nateprofile.jpg');
+            border-radius: 12px;
+            background-image: url('profile-placeholder.jpg'); /* Make sure to use a square image */
             background-size: cover;
             background-position: center;
             box-shadow: 20px 20px 0px rgba(225, 29, 72, 0.2);
-            transition: transform 0.5s ease;
-            margin: 0 auto; /* Backup centering */
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
         }
 
         .bio-image:hover {
@@ -320,16 +324,14 @@
         }
 
         .bio-text {
-            flex: 2;
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* Centers the text block container */
+            flex: 1 1 500px; /* Allow text container to adjust */
+            max-width: 650px;
         }
 
         .bio-text p {
-            margin-bottom: 1.5rem;
-            text-align: center; /* Centers the actual words */
-            max-width: 650px; /* Keeps line lengths comfortable to read */
+            margin-bottom: 2rem;
+            text-align: justify; /* Justify for desktop flow */
+            color: var(--text-secondary);
         }
 
         /* --- Contact Section --- */
@@ -416,35 +418,51 @@
             }
 
             /* Extra Mobile Refinements for Bio */
+            #bio {
+                padding-top: 120px;
+            }
+
+            /* Separates image and text into a vertical centered column */
             #bio .bio-content {
-                gap: 2.5rem;
+                flex-direction: column;
+                justify-content: center;
                 text-align: center;
+                gap: 4rem; 
             }
 
             .bio-image {
-                width: 250px;
-                height: 250px;
-                box-shadow: 10px 10px 0px rgba(225, 29, 72, 0.2);
+                flex: none; /* Strip all flex scaling */
+                width: 300px; /* Exact fixed width for centering */
+                height: 300px;
+                max-width: 90vw; /* Safety fallback for extremely narrow screens */
+                margin: 0 auto; /* Margin centering */
+                align-self: center; /* Flex item centering */
+                
+                /* CRITICAL: A perfectly centered shadow so it doesn't look optically off-center */
+                box-shadow: 0px 15px 0px rgba(225, 29, 72, 0.2);
             }
             
             .bio-image:hover {
-                box-shadow: 15px 15px 0px rgba(225, 29, 72, 0.4);
+                transform: translateY(-5px); /* Upward float instead of diagonal */
+                box-shadow: 0px 20px 0px rgba(225, 29, 72, 0.4);
             }
 
             .bio-text {
                 flex: none;
                 width: 100%;
-                padding: 0 1.5rem; /* Adds breathing room on the edges of phones */
+                padding: 0 1.5rem; /* Space from screen edges */
                 display: flex;
                 flex-direction: column;
                 align-items: center;
             }
 
             .bio-text p {
-                text-align: center; 
+                text-align: center; /* Centers actual words on mobile */
                 margin-left: auto;
                 margin-right: auto;
+                max-width: 100%; /* Use full width of padded container */
             }
+        }
 
             .contact-links {
                 flex-direction: column;
@@ -493,19 +511,19 @@
     </section>
 
     <section id="bio">
-        <h2 class="hidden">About The <span>Artist</span></h2>
-        <div class="bio-content">
-            <div class="bio-image hidden slide-left"></div>
-            <div class="bio-text hidden slide-right">
-                <p>
-                    Nathaniel Morris is a dynamic electric guitarist known for his emotive solos and technical precision. Blending elements of blues, classic/modern rock, and country, he brings a unique sonic texture to every project.
-                </p>
-                <p>
-                    Whether he's tracking in the studio, collaborating on new arrangements, or tearing up a live gig at local venues, his philosophy is simple: serve the song, but never hold back the energy. 
-                </p>
-            </div>
+    <h2 class="animate-on-scroll">About The <span>Artist</span></h2>
+    <div class="bio-content container">
+        <div class="bio-image animate-on-scroll slide-left"></div>
+        <div class="bio-text animate-on-scroll slide-right">
+            <p>
+                Nathaniel Morris is a dynamic electric guitarist known for his emotive solos and technical precision. Blending elements of blues, classic/modern rock, and country, he brings a unique sonic texture to every project.
+            </p>
+            <p>
+                Whether he's tracking in the studio, collaborating on new arrangements, or tearing up a live gig at local venues, his philosophy is simple: serve the song, but never hold back the energy. 
+            </p>
         </div>
-    </section>
+    </div>
+</section>
 
     <section id="contact" class="hidden">
         <h2>Let's <span>Connect</span></h2>
